@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+
+import numpy as np
+import matplotlib.pyplot as plt
+from docplex.mp.model import Model
+
+np.random.seed(1)
+n=5 #num of clients
+m=7 #maximum size of order
+Q=10 #vehicle capacity
+N=[i for i in range(1,n+1)] #clients
+V=[0]+N #verticles with central point
+q={i:np.random.randint(1,m+1) for i in N} #liczba sztuk do dostarczenia
+x=np.random.rand(len(V))#*200
+y=np.random.rand(len(V))#*200
+
+plt.scatter(x[1:],y[1:],c='y')
+for i in N:
+    plt.annotate('q{}({})'.format(i, q[i]), (x[i],y[i]))
+plt.scatter(x[0],y[0],c='r')
+plt.show()
+
+p=[(i,j) for i in V for j in V if i!=j] #all posible routes  
+d={(i,j): np.hypot([x[i]-x[j]],[y[i]-y[j]])[0] for (i,j) in p} #distances
+
+cModel=Model('Cplex VRP')
+X = cModel.binary_var_dict(p, name='X')
+U = cModel.continuous_var_dict(N, ub=Q, name='u')
+
+cModel.minimize(cModel.sum(d[i,j]*X[i,j] for (i,j) in p)) 
+
+
+cModel.add_constraints(cModel.sum(X[i,j] for j in V if j!=i)==1 for i in N)
+#(2) od punktu i (z wyjątkiem zera) może pojechać do jednego punktu j 
+cModel.add_constraints(cModel.sum(X[i,j] for i in V if j!=i)==1 for j in N)
+#(3) od punktu j (z wyjątkiem zera) może pojechać do jednego punktu i
+cModel.add_indicator_constraints(cModel.indicator_constraint(X[i, j], U[i]+q[j] == U[j]) for i, j in p 
+                                 if i!=0 and j!=0) #(15)
+cModel.add_constraints(U[i] >= q[i] for i in N) #(11)
+
+
+solution=cModel.solve()#log_output=True)
+
+#collecting solutions eqal to one for each pair
+active = [a for a in p if X[a].solution_value ==1] #>0.9
+
+plt.scatter(x[1:],y[1:],c='c')
+for i in N:
+    plt.annotate('q{}({})'.format(i, q[i]), (x[i],y[i]))
+for (i,j) in active:
+    plt.plot([x[i],x[j]],[y[i],y[j]],c='y')
+plt.scatter(x[0],y[0],c='r')
+plt.show()
+
+print(solution)
