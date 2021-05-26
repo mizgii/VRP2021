@@ -20,7 +20,7 @@ from ortools.constraint_solver import pywrapcp
 class DataModel(object):
 
 	def __init__(self, args):
-		np.random.seed(0)
+		
 		n=50 #num of clients
 		nv=8 #num of vehicles
 		vc=[3]*nv #capacities
