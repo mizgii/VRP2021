@@ -102,14 +102,14 @@ class DataModel():
 
 class Optimization():
 
-	def __init__(self,model):
+	def __init__(self,model,tlimit):
 		
 		from ortools.constraint_solver import routing_enums_pb2
 		from ortools.constraint_solver import pywrapcp
 		"""Entry point of the program."""
 		# Instantiate the data problem.
 		data = model
-
+		self.__tlimit=tlimit
 		# Create the routing index manager.
 		manager = pywrapcp.RoutingIndexManager(len(data['distance_matrix']),
 											   data['num_vehicles'], data['depot'])
@@ -174,7 +174,7 @@ class Optimization():
 
 		search_parameters.local_search_metaheuristic = (
 			routing_enums_pb2.LocalSearchMetaheuristic.SIMULATED_ANNEALING)
-		search_parameters.time_limit.FromSeconds(50)
+		search_parameters.time_limit.FromSeconds(self.__tlimit)
 		# Solve the problem.
 		self.__solution = routing.SolveWithParameters(search_parameters)
 		self.__data=data
@@ -203,12 +203,12 @@ class Optimization():
 
 		 #Create string with solution
 		
-		solution_string='Objective: '+str(self.__solution.ObjectiveValue())+'\n'
+		solution_string='Objective: '+str(self.__solution.ObjectiveValue())+'<br>'
 		total_distance = 0
 		total_load = 0
 		for vehicle_id in range(self.__data['num_vehicles']):
 			index = self.__routing.Start(vehicle_id)
-			plan_output = 'Route for vehicle {}:\n'.format(vehicle_id)
+			plan_output = 'Route for vehicle {}:<br>'.format(vehicle_id)
 			route_distance = 0
 			route_load = 0
 			while not self.__routing.IsEnd(index):
@@ -219,15 +219,15 @@ class Optimization():
 				index = self.__solution.Value(self.__routing.NextVar(index))
 				route_distance += self.__routing.GetArcCostForVehicle(
 					previous_index, index, vehicle_id)
-			plan_output += ' {0} Load({1})\n'.format(self.__manager.IndexToNode(index),
+			plan_output += ' {0} Load({1})<br>'.format(self.__manager.IndexToNode(index),
 													 route_load)
-			plan_output += 'Distance of the route: {}m\n'.format(route_distance)
-			plan_output += 'Load of the route: {}\n\n'.format(route_load)
+			plan_output += 'Distance of the route: {}m<br>'.format(route_distance)
+			plan_output += 'Load of the route: {}<br><br>'.format(route_load)
 			solution_string+=plan_output
 			total_distance += route_distance
 			total_load += route_load
-		solution_string+=('Total distance of all routes: '+str(total_distance)+' m\n')
-		solution_string+=('Total load of all routes: '+str(total_load)+'\n')
+		solution_string+=('Total distance of all routes: '+str(total_distance)+' m<br>')
+		solution_string+=('Total load of all routes: '+str(total_load)+'<br>')
 		self.__solution_string=solution_string
 		return self.__solution_string
 
