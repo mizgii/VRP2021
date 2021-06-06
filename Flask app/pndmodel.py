@@ -7,6 +7,7 @@ class DataModel():
 
 		N=[i for i in range(1,n+1)] #clients
 		V=[0]+N #verticles with central point
+		self.__V=V
 		x=np.random.rand(len(V))*100
 		y=np.random.rand(len(V))*100
 
@@ -46,6 +47,9 @@ class DataModel():
 		self.__vehicle_capacities = vc
 		self.__num_vehicles = nv
 		self.__depot = 0
+		self.__x=x
+		self.__y=y
+		self.__V=V
 
 	def __createmodel__(self):
 		data = {}
@@ -57,6 +61,33 @@ class DataModel():
 		data['depot'] = self.__depot
 		self.__data=data
 		return self.__data
+
+	def __drawpnd__(self):
+		from matplotlib import pyplot as plt
+		x=self.__x
+		y=self.__y
+		V=self.__V
+
+		plt.figure(figsize=(16, 12))
+		plt.scatter(x[1:],y[1:],c='y')
+		for i in V:
+			#plt.annotate('q{}({})'.format(i, q[i]), (x[i],y[i]))
+			plt.annotate('q{}'.format(i), (x[i],y[i]))
+		plt.scatter(x[0],y[0],c='r')
+
+		for pnd in self.__pickups_deliveries:
+			i=pnd[0]
+			j=pnd[1]
+			dx=x[j]-x[i]
+			dy=y[j]-y[i]
+			plt.arrow(x[i],y[i],dx,dy,width=0.01,length_includes_head=True,head_width=1.5, fc='m', ec='c')
+			plt.grid(True)
+			plt.title('Pickup and delivery points')
+			plt.xlabel('horizontal distance [m]')
+			plt.ylabel('vertical distance [m]')
+			plt.xlim(0,100)
+			plt.ylim(0,100)
+		plt.savefig('figpnd.png')
 	
 	@property
 	def data(self):
@@ -95,20 +126,37 @@ class DataModel():
 		return self.__depot
 	@property
 	def createmodel(self):
-		"""Gets the pickups deliveries."""
+		"""Gets the create model function."""
 		return self.__createmodel__()
+
+	@property
+	def drawpnd(self):
+		"""Gets the drawpnd function."""
+		return self.__drawpnd__()
+	@property
+	def x(self):
+		"""Gets x indexes."""
+		return self.__x
+
+	@property
+	def y(self):
+		"""Gets y indexes."""
+		return self.__y
+
 
 		
 
 class Optimization():
 
-	def __init__(self,model,tlimit):
+	def __init__(self,model,tlimit,x,y):
 		
 		from ortools.constraint_solver import routing_enums_pb2
 		from ortools.constraint_solver import pywrapcp
 		"""Entry point of the program."""
 		# Instantiate the data problem.
 		data = model
+		self.__x=x
+		self.__y=y
 		self.__tlimit=tlimit
 		# Create the routing index manager.
 		manager = pywrapcp.RoutingIndexManager(len(data['distance_matrix']),
@@ -117,6 +165,19 @@ class Optimization():
 		# Create Routing Model.
 		routing = pywrapcp.RoutingModel(manager)
 
+		def get_routes(solution, routing, manager):
+			"""Get vehicle routes from a solution and store them in an array."""
+			# Get vehicle routes and store them in a two dimensional array whose
+			# i,j entry is the jth location visited by vehicle i along its route.
+			routes = []
+			for route_nbr in range(routing.vehicles()):
+				index = routing.Start(route_nbr)
+				route = [manager.IndexToNode(index)]
+				while not routing.IsEnd(index):
+					index = solution.Value(routing.NextVar(index))
+					route.append(manager.IndexToNode(index))
+				routes.append(route)
+			return routes
 
 		# Define cost of each arc.
 		def distance_callback(from_index, to_index):
@@ -175,8 +236,11 @@ class Optimization():
 		search_parameters.local_search_metaheuristic = (
 			routing_enums_pb2.LocalSearchMetaheuristic.SIMULATED_ANNEALING)
 		search_parameters.time_limit.FromSeconds(self.__tlimit)
+		
+
 		# Solve the problem.
 		self.__solution = routing.SolveWithParameters(search_parameters)
+		self.__routes = get_routes(self.__solution, routing, manager)
 		self.__data=data
 		self.__manager=manager
 		self.__routing=routing
@@ -234,3 +298,45 @@ class Optimization():
 	@property
 	def textsol(self):
 		return self.__textsol__()
+
+	def __drawsol__(self):
+		from ortools.constraint_solver import routing_enums_pb2
+		from ortools.constraint_solver import pywrapcp
+		from matplotlib import pyplot as plt
+		import numpy as np
+
+		 #Create drawn file with solution
+		
+		def random_color():
+			return tuple(np.random.random() for _ in range(3))
+
+		plt.figure(figsize=(16, 12))
+		plt.title('Visualisation of optimized routes')
+		plt.grid(True)
+		plt.xlabel('horizontal distance [m]')
+		plt.ylabel('vertical distance [m]')
+		plt.xlim(0,100)
+		plt.ylim(0,100)
+		plt.scatter(self.__x[1:],self.__y[1:],c='y')
+		for i in range(0,len(self.__x)):
+			#plt.annotate('q{}({})'.format(i, q[i]), (x[i],y[i]))
+			plt.annotate('q{}'.format(i), (self.__x[i],self.__y[i]))
+			plt.scatter(self.__x[0],self.__y[0],c='r')
+
+		k=0
+		for route in self.__routes:
+			c = random_color()
+			for ride in range(len(route)-1):
+				i=route[ride]
+				j=route[ride+1]
+				plt.plot([self.__x[i],self.__x[j]],[self.__y[i],self.__y[j]], c=c)
+			plt.plot(1000,1000, c=c,label=('Vehicle '+str(k)))
+			k+=1
+				
+		plt.legend()
+
+		plt.savefig('figsol.png')
+
+	@property
+	def drawsol(self):
+		return self.__drawsol__()
