@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from docplex.mp.model import Model
 
+
 np.random.seed(1)
 n=5 #num of clients
 m=7 #maximum size of order
