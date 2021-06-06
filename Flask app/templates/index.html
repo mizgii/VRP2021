@@ -36,10 +36,10 @@
       </div>
     </nav>
     <div class="container">
-    <h1>About our project</h1>
+    <br><h1>About our project</h1>
 
     <br>
-    Our project means to visualise results of experiments with simulations of Pickup and Delivery models with capacity constraints and in the future, time windows constraints. At the moment by going to the simulation page, you can there enter your desired number of points (an even number) in the 'virtual city', as well as number of vehicles and the capacity of vehicles (we assume all vehicles are of the same type). Afterwards we generate a random distance matrix for the specified number of points, random indexes for pickups and deliveries and randomize values of demands according to maximum capacity of vehicles. Then as a result you get optimized routes for each vehicle and a simple visualisation of routes in a graph. Please keep in mind that the optimization might take a few seconds up to a few minutes, depending on your number of points. We request you don't go beyond 50 points for ease of analyzing the routes. Please click on the 'Simulation' link up above in order to proceed.
+    Our project aims to visualise results of experiments with simulations of Pickup and Delivery models with capacity constraints. At the moment by going to the simulation page, you can there enter your desired number of points (an even number) in the 'virtual city', as well as number of vehicles and the capacity of vehicles (we assume all vehicles are of the same type). The last element is adding the time limit for searching - optimization of routes is a time consuming process which might in the end never find the best solution, therefore a time limit is needed in order for the program to finish finding any solution. Afterwards we generate a random distance matrix for the specified number of points, random indexes for pickups and deliveries and randomize values of demands according to maximum capacity of vehicles. Then as a result you get optimized routes for each vehicle and a simple visualisation of routes in a graph. We recommend you don't go beyond 50 points for ease of analyzing the routes. The more points you put in, the longer the time needed to find an optimal solution - try setting different time limits to see which one returns the best results while not requiring an unoptimal amount of time. Please click here on the <a href="{{ url_for('simulation_page') }}">Simulation link</a> or the 'Simulation' button up above in order to proceed.
 
     <br><br><h2>Tools</h2>
     <br>The tools we use for optimization are solving algorithms provided by the Google OR-tools set. The application is written in Python. The website application uses Flask framework and for now the simple Bootstrap CSS template. 
@@ -48,6 +48,10 @@
     <br>Project team members: Diana Glebowicz, Zofia Mizgalewicz, Karolina Robinson
     <br>Product owner: Paweł Gora
     <br>Supervisor: Dominik Błacha
+
+    <br><br><h2>What's next</h2>
+    <br>In the future we are planning to add time window constraints as well as the possibility of deliveries to more than one point from one destination (at the moment each pickup and delivery index is unique, with no pickups where deliveries are). For the application, we'd like to expand it to feature a registration and login function, as well as saving function for results of conducted experiments. Another feature we would like to add is choosing your desired heuristics algorithm and the possibility of comparing results from experiments with different settings - for instance graphs of total route lengths depending on time limit chosen and algorithm chosen. Another thing would be to move the project from abstract points to one that selects points from a real map fragment downloaded from OpenStreetMap.
+
     <br><br>June 2021
     <!-- Optional JavaScript; choose one of the two! -->
 
