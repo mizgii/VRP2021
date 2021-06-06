@@ -1,13 +1,14 @@
 from flask import Flask,render_template, redirect, url_for
 from forms import SimForm
 from pndmodel import DataModel,Optimization
-
+#from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '9b807628f884d757930e1b4b'
+#db=SQLAlchemy(app)
 
-
-
+#class dataModel(db.model):
+    #points=db.Column()
 @app.route('/')
 @app.route('/about')
 def about_page():
@@ -24,8 +25,9 @@ def simulation_page():
         solution=Optimization(model,tlimit=form.tlimit.data)
         solstring=solution.textsol
         with open("templates/output.html","w") as file:
-            file.write(solstring)
-
+            file.write('<!doctype html><html lang="en"><head><!-- Required meta tags --><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"></head><body>'+solstring+'</body><style>body { background-color: white; color: black}</style></html>')
+        #db.session.add(user_to_create)
+        #db.session.commit()
         return redirect(url_for('solution_page'))
     if form.errors != {}: #If there are not errors from the validations
         for err_msg in form.errors.values():
@@ -40,3 +42,4 @@ def solution_page():
 @app.route('/output.html')
 def output_page():
     return render_template('output.html')
+
