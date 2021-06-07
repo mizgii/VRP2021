@@ -2,7 +2,9 @@ class DataModel():
 
 	def __init__(self, n,nv,cap):
 
+
 		import numpy as np
+		#np.random.seed(0) #can enable seeding so that you can check solutions with different time limits for the same generated problem
 		vc=[cap]*nv #capacities
 
 		N=[i for i in range(1,n+1)] #clients
@@ -63,7 +65,10 @@ class DataModel():
 		return self.__data
 
 	def __drawpnd__(self):
+		import matplotlib
+		matplotlib.use('Agg')
 		from matplotlib import pyplot as plt
+		
 		x=self.__x
 		y=self.__y
 		V=self.__V
@@ -152,7 +157,7 @@ class Optimization():
 		
 		from ortools.constraint_solver import routing_enums_pb2
 		from ortools.constraint_solver import pywrapcp
-		"""Entry point of the program."""
+		
 		# Instantiate the data problem.
 		data = model
 		self.__x=x
@@ -300,8 +305,8 @@ class Optimization():
 		return self.__textsol__()
 
 	def __drawsol__(self):
-		from ortools.constraint_solver import routing_enums_pb2
-		from ortools.constraint_solver import pywrapcp
+		import matplotlib
+		matplotlib.use('Agg')
 		from matplotlib import pyplot as plt
 		import numpy as np
 
