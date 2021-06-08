@@ -239,7 +239,7 @@ class Optimization():
 			routing_enums_pb2.FirstSolutionStrategy.PARALLEL_CHEAPEST_INSERTION)
 
 		search_parameters.local_search_metaheuristic = (
-			routing_enums_pb2.LocalSearchMetaheuristic.SIMULATED_ANNEALING)
+			routing_enums_pb2.LocalSearchMetaheuristic.AUTOMATIC)
 		search_parameters.time_limit.FromSeconds(self.__tlimit)
 		
 
