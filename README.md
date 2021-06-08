@@ -10,7 +10,7 @@ Karolina Robinson
 Zofia Mizgalewicz
 
 
-temat projektu:
+
 
   Przedmiotem niniejszego projektu było znalezienie i zastosowanie narzędzi optymalizacyjnych przy szeroko rozumianym problemie VRP (ang. Vehicle Routing Problem) oraz stworzenie aplikacji webowej do wizualizacji uzyskanych wyników.
 
