@@ -2,7 +2,7 @@ from flask import Flask,render_template, redirect, url_for,send_file
 from forms import SimForm
 from pndmodel import DataModel,Optimization
 
-
+#Application visualizing results of Pickup and Delivery optimization experiments
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '9b807628f884d757930e1b4b'
 
@@ -27,7 +27,7 @@ def simulation_page():
 
         solution.drawsol
         return redirect(url_for('solution_page'))
-    if form.errors != {}: #If there are not errors from the validations
+    if form.errors != {}: #If there are errors from the validations
         for err_msg in form.errors.values():
             print(f'There was an error with submitting: {err_msg}')
 
