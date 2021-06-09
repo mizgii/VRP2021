@@ -31,5 +31,6 @@ OR-Tools 7.2. Laurent Perron and Vincent Furnon, oprogramowanie udostępnione na
 https://flask.palletsprojects.com/en/2.0.x/license/
 
 Raport z projektu:
+
 https://drive.google.com/file/d/1P_qFN5DdC07XrBsPtluoXBVFrc6j_DUT/view
 
