@@ -14,6 +14,7 @@ Raport z projektu:
 https://drive.google.com/file/d/1P_qFN5DdC07XrBsPtluoXBVFrc6j_DUT/view
 
 
+opis:
 
   Przedmiotem niniejszego projektu było znalezienie i zastosowanie narzędzi optymalizacyjnych przy szeroko rozumianym problemie VRP (ang. Vehicle Routing Problem) oraz stworzenie aplikacji webowej do wizualizacji uzyskanych wyników.
 
@@ -24,7 +25,7 @@ https://drive.google.com/file/d/1P_qFN5DdC07XrBsPtluoXBVFrc6j_DUT/view
   
   W przypadku rozpatrywanych przez zespół problemów jako kryterium optymalizacji przyjęto koszt podróży wyrażony odległościowo – celem działania gotowego programu było, w każdym wypadku, znalezienie najkrótszej trasy dla pojazdów. Skupiono się głównie na problemie Pickup and Delivery, w którym pojazdy odbierają zadaną ilość towaru z jednej lokalizacji i dostarczają go do innej. Jako dodatkowe założenia przyjęto ograniczoną ładowność samochodów (ang. capacity constraints) oraz rozpoczęto pracę nad dodaniem ograniczeń czasowych (ang. time window constraints). Algorytmy testowano na zbiorze przypadkowych punktów, jednak rozpoczęto prace nad przełożeniem ich na wariant rzeczywisty – oparty na danych pochodzących z Open Street Map, zapisywanej skrótowo OSM. Wszystkie kody przedstawione w niniejszym repozytorium napisano w języku Python.
 
-Licencje:
+licencje:
 
 © autorzy OpenStreetMap, wszystkie materiały udostępnione na bazie licencji Open Database License: https://www.openstreetmap.org/copyright
 
