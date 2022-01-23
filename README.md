@@ -1,10 +1,6 @@
 # VRP2021
 programowanie zespołowe || projekt grupy VRP 
 
-Raport z projektu:
-
-https://drive.google.com/file/d/1P_qFN5DdC07XrBsPtluoXBVFrc6j_DUT/view
-
 autorki:
 
 Diana Glebowicz
@@ -13,6 +9,9 @@ Karolina Robinson
 
 Zofia Mizgalewicz
 
+Raport z projektu:
+
+https://drive.google.com/file/d/1P_qFN5DdC07XrBsPtluoXBVFrc6j_DUT/view
 
 
 
